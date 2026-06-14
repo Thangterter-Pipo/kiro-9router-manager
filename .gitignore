@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+*.spec.bak
+
+# Local account / secret data — NEVER commit
+kiro_accounts.json
+*.sqlite
+*.db
+.env
+*.token.json
+kiro-auth-token.json
+
+# PyInstaller
+*.manifest
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

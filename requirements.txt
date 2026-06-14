@@ -1,0 +1,14 @@
+# Kiro 9router Manager — Python dependencies
+#
+# Phần lõi GUI dùng thư viện chuẩn của Python (tkinter, sqlite3, json,
+# urllib, threading...) nên KHÔNG cần cài thêm package pip nào.
+#
+# Yêu cầu ngoài Python:
+#   - Node.js + playwright-core  (cho engine ninerouter_kiro_idc_auto_import.mjs)
+#       npm install playwright-core
+#   - Google Chrome              (cho luồng browser automation)
+#   - 9router chạy local         (mặc định http://127.0.0.1:20128)
+#
+# Build .exe:
+#   pip install pyinstaller
+pyinstaller>=6.0 ; extra == "build"
