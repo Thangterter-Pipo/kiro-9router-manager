@@ -38,7 +38,6 @@ Everything is packed into a tidy 5-tab GUI, or you can use it as a **CLI** if yo
 - 💾 **Thread-safe account store** — saves to JSON with *atomic writes*, keeping both `mfaSecret` and `password` for automatic re-login.
 - 🪪 **Supports both Social Auth and IAM Identity Center (IDC)**.
 - 🧠 **AWS SSO cache integration** — writes tokens into `~/.aws/sso/cache` so opening the Kiro IDE means you're already logged in.
-- 📲 **Telegram reporting** (optional) — sends login results via the `TELEGRAM_CHAT_ID` + `HERMES_EXE` environment variables.
 - 📦 **`.exe` packaging** — pre-built with **PyInstaller** using the `Kiro9RouterImporter.spec` file.
 
 ---
@@ -59,7 +58,7 @@ A **dark theme** interface with 5 tidy tabs:
 ### 4️⃣ Builder ID / SSO tab — device-flow OIDC (no password/MFA)
 ![Builder ID / SSO tab](docs/screenshots/04-builderid-sso.jpg)
 
-### 5️⃣ Settings tab — configure 9router, DB, Chrome, Telegram
+### 5️⃣ Settings tab — configure 9router, DB, Chrome
 ![Settings tab](docs/screenshots/05-settings.jpg)
 
 ---
@@ -176,8 +175,6 @@ The `Kiro9RouterImporter.spec` file is already included in the repo and configur
 - `NINEROUTER_DB` — path to the 9router database
 - `NINEROUTER_BASE_URL` — base URL of 9router
 - `CHROME_PATH` — path to Google Chrome
-- `TELEGRAM_CHAT_ID` — chat ID for sending result reports via Telegram
-- `HERMES_EXE` — path to the executable used for Telegram reporting
 
 ---
 

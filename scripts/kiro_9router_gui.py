@@ -4,8 +4,6 @@ import argparse
 import json
 import os
 import queue
-import shutil
-import subprocess
 import sys
 import threading
 import tkinter as tk
@@ -611,7 +609,6 @@ class ManagerGui(tk.Tk):
         self.timeout_var = tk.StringVar(value="15")
         self.db_var = tk.StringVar(value=str(app._default_db()))
         self.chrome_var = tk.StringVar(value=app._default_chrome())
-        self.notify_tg_var = tk.BooleanVar(value=True)
 
         fields = [
             ("Mật khẩu mới mặc định", self.new_password_var, "*", None),
@@ -629,10 +626,8 @@ class ManagerGui(tk.Tk):
             ttk.Entry(cell, textvariable=var, show=show).grid(row=0, column=0, sticky="ew")
             if browse:
                 ttk.Button(cell, text="...", width=4, command=browse).grid(row=0, column=1, padx=(6, 0))
-        ttk.Checkbutton(parent, text="Báo Telegram khi xong", variable=self.notify_tg_var).grid(
-            row=len(fields), column=0, columnspan=2, sticky="w", pady=(12, 0))
         ttk.Label(parent, text="Tài khoản lưu tại: " + str(self.store.path), style="Card.TLabel",
-                  foreground=MUTED).grid(row=len(fields) + 1, column=0, columnspan=2, sticky="w", pady=(16, 0))
+                  foreground=MUTED).grid(row=len(fields), column=0, columnspan=2, sticky="w", pady=(16, 0))
 
     # ---- table helpers ----------------------------------------------
     def _refresh_table(self) -> None:
@@ -886,9 +881,6 @@ class ManagerGui(tk.Tk):
                     self.status_lbl.configure(foreground=OK if is_ok else ERR)
                     self.progress.configure(value=self.progress["maximum"])
                     self._refresh_table()
-                    if self.notify_tg_var.get():
-                        threading.Thread(target=self._notify_telegram,
-                                         args=(message, self._last_result), daemon=True).start()
         except queue.Empty:
             pass
         self.after(100, self._drain_log_queue)
@@ -911,41 +903,6 @@ class ManagerGui(tk.Tk):
             self.log_text.insert(tk.END, message + "\n")
         self.log_text.see(tk.END)
         self.log_text.configure(state="disabled")
-
-    def _notify_telegram(self, status_message: str, result: object) -> None:
-        try:
-            lines: list[str] = []
-            ok_count = fail_count = 0
-            if isinstance(result, dict):
-                for item in result.get("results", []):
-                    name = item.get("name", "?")
-                    if item.get("ok"):
-                        ok_count += 1
-                        lines.append(f"✅ {name} → vào 9router (refreshToken OK)")
-                    else:
-                        fail_count += 1
-                        lines.append(f"❌ {name} → {str(item.get('error', 'lỗi'))[:120]}")
-                verify = result.get("verify", {})
-                if isinstance(verify, dict) and verify.get("kiroConnections") is not None:
-                    lines.append(f"📊 Tổng kết nối Kiro trong 9router: {verify['kiroConnections']}")
-            header = f"🤖 Kiro Manager: {ok_count} thành công, {fail_count} lỗi"
-            msg = header + ("\n" + "\n".join(lines) if lines else "")
-            hermes = shutil.which("hermes") or os.environ.get("HERMES_EXE", "")
-            if not hermes or not os.path.isfile(hermes):
-                self.log_queue.put(("log", "Telegram: không tìm thấy hermes.exe, bỏ qua"))
-                return
-            chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-            if not chat_id:
-                self.log_queue.put(("log", "Telegram: chưa đặt TELEGRAM_CHAT_ID, bỏ qua"))
-                return
-            env = os.environ.copy()
-            env.pop("_HERMES_GATEWAY", None)
-            env.pop("HERMES_GATEWAY_DETACHED", None)
-            subprocess.run([hermes, "send", "-t", f"telegram:{chat_id}", msg],
-                           timeout=90, capture_output=True, env=env)
-            self.log_queue.put(("log", "📤 Đã gửi báo cáo Telegram"))
-        except Exception as exc:
-            self.log_queue.put(("log", f"Telegram notify failed: {exc}"))
 
 
 def self_test() -> int:
