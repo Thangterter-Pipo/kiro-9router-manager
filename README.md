@@ -1,6 +1,8 @@
 # 🚀 Kiro 9router Manager
 
-> **Công cụ desktop GUI giúp bạn quản lý, đăng nhập và nạp tài khoản Kiro (AWS CodeWhisperer / Kiro IDE) vào 9router một cách tự động — nhanh, gọn, hàng loạt.**
+**🌐 Language / Ngôn ngữ:** **English** · [Tiếng Việt](./README.vi.md)
+
+> **A desktop GUI tool that helps you manage, log in, and load Kiro accounts (AWS CodeWhisperer / Kiro IDE) into 9router automatically — fast, clean, and in bulk.**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
@@ -10,212 +12,208 @@
 
 ---
 
-## 📖 Giới thiệu
+## 📖 Introduction
 
-**Kiro 9router Manager** là một ứng dụng desktop viết bằng **Python + Tkinter** (giao diện *dark theme* dễ nhìn) giúp bạn **quản lý nhiều tài khoản Kiro** và tự động hóa quá trình đăng nhập chúng vào **9router** (một *local AI model router/proxy*) cũng như vào **IDE Kiro**.
+**Kiro 9router Manager** is a desktop application built with **Python + Tkinter** (with an easy-on-the-eyes *dark theme*) that helps you **manage multiple Kiro accounts** and automate logging them into **9router** (a *local AI model router/proxy*) as well as into the **Kiro IDE**.
 
-Thay vì đăng nhập thủ công từng tài khoản một, công cụ cho phép bạn:
+Instead of logging in to each account manually, the tool lets you:
 
-- Lưu trữ và theo dõi trạng thái của nhiều tài khoản trong một bảng trực quan.
-- Đăng nhập / đăng nhập lại **hàng loạt** chỉ với vài cú click.
-- Nạp token vào **cả 9router lẫn IDE Kiro** cùng lúc.
-- Đăng nhập an toàn qua **device-flow OIDC** (AWS Builder ID / IAM Identity Center) mà **không cần mật khẩu, không MFA, không automation trình duyệt**.
+- Store and track the status of many accounts in a clear, visual table.
+- Log in / re-login in **bulk** with just a few clicks.
+- Load tokens into **both 9router and the Kiro IDE** at the same time.
+- Sign in securely via **device-flow OIDC** (AWS Builder ID / IAM Identity Center) with **no password, no MFA, and no browser automation**.
 
-Tất cả gói gọn trong một GUI 5 tab gọn gàng, hoặc dùng dưới dạng **CLI** cho ai thích tự động hóa.
-
----
-
-## ✨ Tính năng nổi bật
-
-- 🗂️ **Quản lý đa tài khoản** — bảng `Treeview` hiển thị toàn bộ tài khoản kèm trạng thái `OK` / `Lỗi` / `Chưa từng đăng nhập`.
-- ⚡ **Đăng nhập hàng loạt** — chọn nhiều dòng, đăng nhập / relogin một loạt, mở thẳng IDE Kiro.
-- 🔐 **Device-flow OIDC (tính năng mạnh nhất)** — đăng nhập qua **AWS Builder ID** hoặc **IAM Identity Center** mà không cần password/MFA/browser automation. Tool hiện mã + link → bạn bấm *Allow* → tool tự lấy `accessToken` + `refreshToken` **thật** (refresh được lâu dài).
-- 📥 **Nhập linh hoạt** — thêm từng tài khoản hoặc dán hàng loạt theo định dạng `mail|pass|startUrl|mfaSecret`.
-- 🧩 **Parse JSON token đa định dạng** — nhận file `kiro-auth-token.json`, mảng nhiều account, hoặc export từ 9router → tự nhận diện và nạp vào.
-- 🔄 **Tự refresh token** — hỗ trợ cả OIDC (`oidc.{region}.amazonaws.com/token`) lẫn social auth (`prod.us-east-1.auth.desktop.kiro.dev/refreshToken`).
-- 💾 **Account store thread-safe** — lưu JSON với *atomic write*, giữ cả `mfaSecret` + `password` để relogin tự động.
-- 🪪 **Hỗ trợ cả Social Auth lẫn IAM Identity Center (IDC)**.
-- 🧠 **Tích hợp AWS SSO cache** — ghi token vào `~/.aws/sso/cache` để mở IDE Kiro là đã đăng nhập sẵn.
-- 📲 **Báo cáo qua Telegram** (tùy chọn) — gửi kết quả đăng nhập qua biến môi trường `TELEGRAM_CHAT_ID` + `HERMES_EXE`.
-- 📦 **Đóng gói `.exe`** — build sẵn bằng **PyInstaller** với file `Kiro9RouterImporter.spec`.
+Everything is packed into a tidy 5-tab GUI, or you can use it as a **CLI** if you prefer automation.
 
 ---
 
-## 🖼️ Ảnh / Demo
+## ✨ Key Features
 
-Giao diện **dark theme** gồm 5 tab gọn gàng:
-
-### 1️⃣ Tab Tài khoản — bảng quản lý đa tài khoản
-![Tab Tài khoản](docs/screenshots/01-accounts.jpg)
-
-### 2️⃣ Tab Thêm / Nhập — thêm thủ công hoặc dán hàng loạt
-![Tab Thêm / Nhập](docs/screenshots/02-add-import.jpg)
-
-### 3️⃣ Tab Đăng nhập JSON — nạp token JSON đa định dạng
-![Tab Đăng nhập JSON](docs/screenshots/03-json-login.jpg)
-
-### 4️⃣ Tab Builder ID / SSO — device-flow OIDC (không cần password/MFA)
-![Tab Builder ID / SSO](docs/screenshots/04-builderid-sso.jpg)
-
-### 5️⃣ Tab Cài đặt — cấu hình 9router, DB, Chrome, Telegram
-![Tab Cài đặt](docs/screenshots/05-settings.jpg)
+- 🗂️ **Multi-account management** — a `Treeview` table shows all your accounts with their status: `OK` / `Error` / `Never logged in`.
+- ⚡ **Bulk login** — select multiple rows, log in / re-login them all at once, and open the Kiro IDE directly.
+- 🔐 **Device-flow OIDC (the most powerful feature)** — sign in via **AWS Builder ID** or **IAM Identity Center** with no password/MFA/browser automation. The tool shows a code + link → you click *Allow* → the tool automatically obtains a **real** `accessToken` + `refreshToken` (long-lived, refreshable).
+- 📥 **Flexible import** — add accounts one by one, or paste them in bulk using the `mail|pass|startUrl|mfaSecret` format.
+- 🧩 **Multi-format JSON token parsing** — accepts a `kiro-auth-token.json` file, an array of multiple accounts, or an export from 9router → auto-detects and loads them.
+- 🔄 **Automatic token refresh** — supports both OIDC (`oidc.{region}.amazonaws.com/token`) and social auth (`prod.us-east-1.auth.desktop.kiro.dev/refreshToken`).
+- 💾 **Thread-safe account store** — saves to JSON with *atomic writes*, keeping both `mfaSecret` and `password` for automatic re-login.
+- 🪪 **Supports both Social Auth and IAM Identity Center (IDC)**.
+- 🧠 **AWS SSO cache integration** — writes tokens into `~/.aws/sso/cache` so opening the Kiro IDE means you're already logged in.
+- 📲 **Telegram reporting** (optional) — sends login results via the `TELEGRAM_CHAT_ID` + `HERMES_EXE` environment variables.
+- 📦 **`.exe` packaging** — pre-built with **PyInstaller** using the `Kiro9RouterImporter.spec` file.
 
 ---
 
-## 🧰 Yêu cầu hệ thống
+## 🖼️ Screenshots / Demo
 
-| Thành phần | Yêu cầu |
-|---|---|
-| **Python** | 3.10 trở lên |
-| **Node.js** | Cần thiết cho engine `.mjs` (dùng `playwright-core`) |
-| **9router** | Đang chạy local (mặc định `http://127.0.0.1:20128`) |
-| **Google Chrome** | Dùng cho luồng automation trình duyệt |
-| **Hệ điều hành** | Windows (khuyến nghị) |
+A **dark theme** interface with 5 tidy tabs:
+
+### 1️⃣ Accounts tab — multi-account management table
+![Accounts tab](docs/screenshots/01-accounts.jpg)
+
+### 2️⃣ Add / Import tab — add manually or paste in bulk
+![Add / Import tab](docs/screenshots/02-add-import.jpg)
+
+### 3️⃣ JSON Login tab — load tokens in multiple JSON formats
+![JSON Login tab](docs/screenshots/03-json-login.jpg)
+
+### 4️⃣ Builder ID / SSO tab — device-flow OIDC (no password/MFA)
+![Builder ID / SSO tab](docs/screenshots/04-builderid-sso.jpg)
+
+### 5️⃣ Settings tab — configure 9router, DB, Chrome, Telegram
+![Settings tab](docs/screenshots/05-settings.jpg)
 
 ---
 
-## ⚙️ Cài đặt & Chạy
+## 🧰 System Requirements
 
-### 1. Clone repo
+- **Python** — 3.10 or higher
+- **Node.js** — required for the `.mjs` engine (uses `playwright-core`)
+- **9router** — running locally (default `http://127.0.0.1:20128`)
+- **Google Chrome** — used for the browser automation flow
+- **Operating system** — Windows (recommended)
+
+---
+
+## ⚙️ Installation & Usage
+
+### 1. Clone the repo
 
 ```bash
 git clone https://github.com/Thangterter-Pipo/kiro-9router-manager.git
 cd kiro-9router-manager
 ```
 
-### 2. Cài đặt phụ thuộc
+### 2. Install dependencies
 
 ```bash
-# Phần lõi GUI dùng thư viện chuẩn Python — không cần pip install gì thêm.
-npm install playwright-core   # cho engine .mjs (browser automation)
+# The GUI core uses the Python standard library — no extra pip install needed.
+npm install playwright-core   # for the .mjs engine (browser automation)
 ```
 
-### 3. Khởi động 9router
+### 3. Start 9router
 
-Đảm bảo 9router đang chạy ở địa chỉ local (mặc định `http://127.0.0.1:20128`).
+Make sure 9router is running on its local address (default `http://127.0.0.1:20128`).
 
-### 4. Chạy GUI
+### 4. Run the GUI
 
 ```bash
 python scripts/kiro_9router_gui.py
 ```
 
-### 🔧 Dùng qua CLI
+### 🔧 Using the CLI
 
 ```bash
-# Chạy lõi / import từ file
+# Run the core / import from a file
 python scripts/kiro_9router_app.py --input <file> --timeout-minutes N
 
-# Đăng nhập device-flow OIDC (Builder ID / IdC)
+# Device-flow OIDC login (Builder ID / IdC)
 python scripts/kiro_device_login.py \
     --start-url https://view.awsapps.com/start \
     --targets 9router,ide
 
-# Đăng nhập từ token JSON
+# Login from a JSON token
 python scripts/kiro_json_login.py --file token.json --targets 9router,ide
 ```
 
 ---
 
-## 🧭 Hướng dẫn dùng từng Tab
+## 🧭 Tab-by-Tab Guide
 
-### 1️⃣ Tab **Tài khoản**
-Trung tâm quản lý của bạn. Bảng `Treeview` liệt kê toàn bộ tài khoản kèm trạng thái. Tại đây bạn có thể:
-- Chọn **nhiều dòng** để **đăng nhập / đăng nhập lại hàng loạt**.
-- Bấm **Vào IDE Kiro** để mở IDE với tài khoản đã chọn.
-- **Sửa** / **Xóa** tài khoản.
-- Theo dõi trạng thái `OK` / `Lỗi` / `Chưa từng đăng nhập`.
+### 1️⃣ **Accounts** tab
+Your management hub. The `Treeview` table lists all accounts with their status. Here you can:
+- Select **multiple rows** to **log in / re-login in bulk**.
+- Click **Open Kiro IDE** to launch the IDE with the selected account.
+- **Edit** / **Delete** accounts.
+- Track the `OK` / `Error` / `Never logged in` status.
 
-### 2️⃣ Tab **Thêm / Nhập**
-Thêm tài khoản vào store:
-- Thêm **một** tài khoản qua form.
-- Hoặc **dán hàng loạt** theo định dạng:
+### 2️⃣ **Add / Import** tab
+Add accounts to the store:
+- Add **a single** account via the form.
+- Or **paste in bulk** using the format:
   ```
   mail|pass|startUrl|mfaSecret
   ```
 
-### 3️⃣ Tab **Đăng nhập JSON**
-Dán token Kiro dạng **JSON** — hỗ trợ nhiều định dạng:
-- File `kiro-auth-token.json`
-- Mảng nhiều account
-- Export từ 9router
+### 3️⃣ **JSON Login** tab
+Paste a Kiro token in **JSON** form — multiple formats supported:
+- A `kiro-auth-token.json` file
+- An array of multiple accounts
+- An export from 9router
 
-Tool tự **parse** và nạp vào 9router / IDE. Có **tùy chọn refresh token**.
+The tool automatically **parses** it and loads it into 9router / the IDE. A **refresh token option** is available.
 
-### 4️⃣ Tab **Builder ID / SSO** 🏆 *(mạnh nhất)*
-Đăng nhập qua **device-flow OIDC** — không cần mật khẩu, MFA hay automation trình duyệt:
-1. Bấm nút đăng nhập.
-2. Tool hiển thị **mã** + **link**.
-3. Bạn mở link, bấm **Allow**.
-4. Tool tự lấy `accessToken` + `refreshToken` **thật** (refresh lâu dài).
+### 4️⃣ **Builder ID / SSO** tab 🏆 *(most powerful)*
+Sign in via **device-flow OIDC** — no password, MFA, or browser automation:
+1. Click the login button.
+2. The tool shows a **code** + **link**.
+3. You open the link and click **Allow**.
+4. The tool automatically obtains a **real** `accessToken` + `refreshToken` (long-lived).
 
-Hỗ trợ cả **AWS Builder ID** và **IAM Identity Center**.
+Supports both **AWS Builder ID** and **IAM Identity Center**.
 
-### 5️⃣ Tab **Cài đặt**
-Cấu hình:
-- Địa chỉ **9router**.
-- **Đường dẫn DB**.
+### 5️⃣ **Settings** tab
+Configure:
+- The **9router** address.
+- The **DB path**.
 
 ---
 
-## 📦 Build `.exe`
+## 📦 Build the `.exe`
 
-Đóng gói ứng dụng thành file thực thi độc lập bằng PyInstaller:
+Package the application into a standalone executable with PyInstaller:
 
 ```bash
 pip install pyinstaller
 python -m PyInstaller --noconfirm Kiro9RouterImporter.spec
 ```
 
-File `Kiro9RouterImporter.spec` đã có sẵn trong repo, cấu hình mọi thứ cần thiết.
+The `Kiro9RouterImporter.spec` file is already included in the repo and configures everything needed.
 
 ---
 
-## 🌱 Biến môi trường (tùy chọn)
+## 🌱 Environment Variables (optional)
 
-| Biến | Mô tả |
-|---|---|
-| `NINEROUTER_DB` | Đường dẫn tới DB của 9router |
-| `NINEROUTER_BASE_URL` | Địa chỉ base URL của 9router |
-| `CHROME_PATH` | Đường dẫn tới Google Chrome |
-| `TELEGRAM_CHAT_ID` | Chat ID để gửi báo cáo kết quả qua Telegram |
-| `HERMES_EXE` | Đường dẫn executable dùng cho báo cáo Telegram |
+- `NINEROUTER_DB` — path to the 9router database
+- `NINEROUTER_BASE_URL` — base URL of 9router
+- `CHROME_PATH` — path to Google Chrome
+- `TELEGRAM_CHAT_ID` — chat ID for sending result reports via Telegram
+- `HERMES_EXE` — path to the executable used for Telegram reporting
 
 ---
 
-## 🗂️ Cấu trúc dự án
+## 🗂️ Project Structure
 
 ```
 scripts/
-├── kiro_9router_gui.py                        # GUI chính (5 tab, dark theme)
-├── kiro_9router_app.py                        # Entry point lõi / CLI
-├── kiro_account_store.py                      # Quản lý lưu trữ tài khoản (JSON, thread-safe)
-├── kiro_device_login.py                       # Đăng nhập device-flow OIDC (Builder ID / IdC)
-├── kiro_json_login.py                         # Đăng nhập từ token JSON
-├── kiro_ide_login.py                          # Ghi token vào AWS SSO cache cho IDE Kiro
-├── ninerouter_kiro_login.py                   # Backend login + ghi 9router DB
-├── ninerouter_kiro_bulk_import.py             # Import hàng loạt
-├── ninerouter_kiro_idc_auto_import.mjs        # Engine browser automation (Node + playwright-core)
-└── ninerouter_kiro_idc_interactive_import.py  # Import tương tác
+├── kiro_9router_gui.py                        # Main GUI (5 tabs, dark theme)
+├── kiro_9router_app.py                        # Core entry point / CLI
+├── kiro_account_store.py                      # Account storage manager (JSON, thread-safe)
+├── kiro_device_login.py                       # Device-flow OIDC login (Builder ID / IdC)
+├── kiro_json_login.py                         # Login from a JSON token
+├── kiro_ide_login.py                          # Write tokens into AWS SSO cache for the Kiro IDE
+├── ninerouter_kiro_login.py                   # Backend login + write 9router DB
+├── ninerouter_kiro_bulk_import.py             # Bulk import
+├── ninerouter_kiro_idc_auto_import.mjs        # Browser automation engine (Node + playwright-core)
+└── ninerouter_kiro_idc_interactive_import.py  # Interactive import
 
-Kiro9RouterImporter.spec                       # Cấu hình build PyInstaller
+Kiro9RouterImporter.spec                       # PyInstaller build configuration
 ```
 
 ---
 
 ## ⚠️ Disclaimer & License
 
-> **Lưu ý quan trọng:** Công cụ này **CHỈ** dùng cho các tài khoản Kiro **hợp lệ mà chính bạn sở hữu**. Chúng tôi **không khuyến khích** bất kỳ hành vi nào vi phạm hoặc lạm dụng điều khoản dịch vụ của AWS / Kiro. Người dùng tự chịu trách nhiệm về việc sử dụng của mình.
+> **Important:** This tool is **ONLY** for **valid Kiro accounts that you own**. We **do not encourage** any behavior that violates or abuses the AWS / Kiro Terms of Service. Users are solely responsible for how they use it.
 
-Dự án được phát hành theo giấy phép **MIT** — tự do sử dụng, chỉnh sửa và phân phối.
+This project is released under the **MIT** license — free to use, modify, and distribute.
 
 ---
 
-## 👤 Tác giả
+## 👤 Author
 
 **Thangterter-Pipo**
 🔗 [github.com/Thangterter-Pipo](https://github.com/Thangterter-Pipo)
 
 ---
 
-<p align="center">⭐ Nếu thấy hữu ích, hãy để lại một star cho repo nhé! ⭐</p>
+<p align="center">⭐ If you find this useful, please leave a star on the repo! ⭐</p>
